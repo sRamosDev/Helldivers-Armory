@@ -10,11 +10,15 @@ import {Header} from "./components/Header.tsx";
 import {Footer} from "./components/Footer.tsx";
 
 function App() {
-    const {slots, availableItems, selectedSlot, setSelectedSlot} = useLoadoutStore();
+    const {slots, availableItems, selectedSlot, setSelectedSlot, fetchItems } = useLoadoutStore();
 
     const filteredItems = availableItems.filter(item =>
         !selectedSlot || item.type === selectedSlot
     );
+
+    useEffect(() => {
+        fetchItems();
+    }, [fetchItems]);
 
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
@@ -39,9 +43,10 @@ function App() {
                         {/* Sidebar */}
                         <div className="overflow-y-auto pr-2 sidebar">
                             <h2 className="text-xl mb-4">Available Items</h2>
+                            <div className="space-y-2 h-[calc(80vh-6rem)]">
                             {filteredItems.map((item) => (
                                 <DraggableItem key={item.id} item={item}/>
-                            ))}
+                            ))}</div>
                             {selectedSlot && filteredItems.length === 0 && (
                                 <p className="text-gray-400">No {selectedSlot} items available</p>
                             )}

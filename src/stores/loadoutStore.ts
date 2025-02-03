@@ -8,6 +8,7 @@ type LoadoutState = {
     removeItemFromSlot: (slotType: LoadoutItem['type']) => void;
     selectedSlot: LoadoutItem['type'] | null;
     setSelectedSlot: (type: LoadoutItem['type'] | null) => void;
+    fetchItems: () => Promise<void>;
 }
 
 const initialSlots: LoadoutSlot[] = [
@@ -43,4 +44,32 @@ export const useLoadoutStore = create<LoadoutState>((set) => ({
             slot.type === slotType ? { ...slot, item: null } : slot
         )
     })),
+    fetchItems: async () => {
+        try {
+            const [gearResponse, weaponsResponse] = await Promise.all([
+                fetch('http://localhost:3000/api/gear'),
+                fetch('http://localhost:3000/api/weapon')
+            ]);
+
+            const gear = await gearResponse.json();
+            const weapons = await weaponsResponse.json();
+
+            const mappedItems: LoadoutItem[] = [
+                ...gear.map((item: any) => ({
+                    id: item.id.toString(),
+                    name: item.name,
+                    type: item.category as LoadoutItem['type']
+                })),
+                ...weapons.map((item: any) => ({
+                    id: item.id.toString(),
+                    name: item.name,
+                    type: item.category as LoadoutItem['type']
+                }))
+            ];
+
+            set({ availableItems: mappedItems });
+        } catch (error) {
+            console.error('Failed to fetch items:', error);
+        }
+    }
 }));

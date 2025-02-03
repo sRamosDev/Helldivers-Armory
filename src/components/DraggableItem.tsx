@@ -12,14 +12,19 @@ export const DraggableItem = ({item}: { item: LoadoutItem }) => {
         }),
     }));
 
+
     return (
         <div
             ref={drag}
-            className={`flex items-center justify-between p-4 mb-2 bg-gray-800 rounded-lg
-        ${isDragging ? "opacity-50 cursor-grabbing" : "opacity-100 cursor-move"}
-        transition-all hover:bg-gray-700`}
+            className={`group flex items-center justify-between p-4 mb-2 bg-gray-800 rounded-lg h-16
+                ${isDragging ? "opacity-50 cursor-grabbing" : "opacity-100 cursor-move"}
+                transition-all hover:bg-gray-700 overflow-hidden`}
         >
-            <span>{item.name}</span>
+            <div className="relative flex-1 min-w-0">
+                <span className="inline-block whitespace-nowrap group-hover:animate-scroll-text">
+                    {item.name}
+                </span>
+            </div>
             {/* Only show remove button in slots */}
             {item.type !== "primary" && item.type !== "secondary" && item.type !== "throwable" && item.type !== "armor" && item.type !== "helmet" && item.type !== "cape" && (
                 <button

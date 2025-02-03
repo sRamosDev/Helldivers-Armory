@@ -50,3 +50,27 @@
 .read-the-docs {
     color: #888;
 }
+
+/* Custom scroll animation */
+@keyframes scroll-text {
+    from { transform: translateX(0%); }
+    to { transform: translateX(-100%); }
+}
+
+.animate-scroll-text {
+    animation: scroll-text 10s linear infinite;
+    padding-left: 100%;
+}
+
+.animate-scroll-text:hover {
+    animation-play-state: running;
+}
+
+/* Pause animation when not hovering */
+.group:hover .animate-scroll-text {
+    animation-play-state: running;
+}
+
+.animate-scroll-text {
+    animation-play-state: paused;
+}
