@@ -10,11 +10,15 @@ import {Header} from "./components/Header.tsx";
 import {Footer} from "./components/Footer.tsx";
 
 function App() {
-    const {slots, availableItems, selectedSlot, setSelectedSlot, fetchItems } = useLoadoutStore();
+    const {slots, weapons, gear, selectedSlot, setSelectedSlot, fetchItems} = useLoadoutStore();
 
-    const filteredItems = availableItems.filter(item =>
-        !selectedSlot || item.type === selectedSlot
-    );
+
+    const weaponSlots = ['primary', 'secondary', 'throwable'];
+    const gearSlots = ['armor', 'helmet', 'cape'];
+
+    // Determine which category is selected
+    const showWeapons = selectedSlot ? weaponSlots.includes(selectedSlot) : true;
+    const showGear = selectedSlot ? gearSlots.includes(selectedSlot) : true;
 
     useEffect(() => {
         fetchItems();
@@ -39,16 +43,44 @@ function App() {
 
                 {/* Centered Main Content Area */}
                 <div className="flex-1 overflow-hidden flex items-center justify-center p-4">
-                    <div className="w-[80vw] h-[80vh] max-w-[1200px] max-h-[800px] grid grid-cols-[256px_1fr] gap-8 bg-gray-950 rounded-xl p-8 shadow-2xl">
+                    <div
+                        className="w-[80vw] h-[80vh] max-w-[1200px] max-h-[800px] grid grid-cols-[256px_1fr] gap-8 bg-gray-950 rounded-xl p-8 shadow-2xl">
                         {/* Sidebar */}
                         <div className="overflow-y-auto pr-2 sidebar">
                             <h2 className="text-xl mb-4">Available Items</h2>
-                            <div className="space-y-2 h-[calc(80vh-6rem)]">
-                            {filteredItems.map((item) => (
-                                <DraggableItem key={item.id} item={item}/>
-                            ))}</div>
-                            {selectedSlot && filteredItems.length === 0 && (
-                                <p className="text-gray-400">No {selectedSlot} items available</p>
+
+                            {/* Weapons Section - Only show when weapon slot selected or no selection */}
+                            {showWeapons && (
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-bold text-yellow-500 mb-2">Weapons</h3>
+                                    <div className="space-y-2 h-[calc(80vh-6rem)]">
+                                        {weapons
+                                            .filter(item => !selectedSlot || item.type === selectedSlot)
+                                            .map((item) => (
+                                                <DraggableItem key={item.id} item={item}/>
+                                            ))}
+                                        {selectedSlot && weaponSlots.includes(selectedSlot) && weapons.filter(item => item.type === selectedSlot).length === 0 && (
+                                            <p className="text-gray-400">No {selectedSlot} weapons available</p>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* Gear Section - Only show when gear slot selected or no selection */}
+                            {showGear && (
+                                <div className="mb-6">
+                                    <h3 className="text-lg font-bold text-yellow-500 mb-2">Gear</h3>
+                                    <div className="space-y-2 h-[calc(80vh-6rem)]">
+                                        {gear
+                                            .filter(item => !selectedSlot || item.type === selectedSlot)
+                                            .map((item) => (
+                                                <DraggableItem key={item.id} item={item}/>
+                                            ))}
+                                        {selectedSlot && gearSlots.includes(selectedSlot) && gear.filter(item => item.type === selectedSlot).length === 0 && (
+                                            <p className="text-gray-400">No {selectedSlot} gear available</p>
+                                        )}
+                                    </div>
+                                </div>
                             )}
                         </div>
 

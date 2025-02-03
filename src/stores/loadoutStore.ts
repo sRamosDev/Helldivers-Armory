@@ -1,9 +1,10 @@
-import { create } from 'zustand';
-import { LoadoutItem, LoadoutSlot } from '../types/loadout';
+import {create} from 'zustand';
+import {LoadoutItem, LoadoutSlot} from '../types/loadout';
 
 type LoadoutState = {
     slots: LoadoutSlot[];
-    availableItems: LoadoutItem[];
+    weapons: LoadoutItem[];
+    gear: LoadoutItem[];
     addItemToSlot: (item: LoadoutItem, slotType: LoadoutItem['type']) => void;
     removeItemFromSlot: (slotType: LoadoutItem['type']) => void;
     selectedSlot: LoadoutItem['type'] | null;
@@ -12,38 +13,31 @@ type LoadoutState = {
 }
 
 const initialSlots: LoadoutSlot[] = [
-    { type: 'primary', item: null },
-    { type: 'secondary', item: null },
-    { type: 'throwable', item: null },
-    { type: 'armor', item: null },
-    { type: 'helmet', item: null },
-    { type: 'cape', item: null },
-];
-
-const initialItems: LoadoutItem[] = [
-    { id: '1', name: 'Liberator', type: 'primary' },
-    { id: '2', name: 'Redeemer', type: 'secondary' },
-    { id: '3', name: 'Stun Grenade', type: 'throwable' },
-    { id: '4', name: 'Heavy Armor', type: 'armor' },
-    { id: '5', name: 'Tactical Helmet', type: 'helmet' },
-    { id: '6', name: 'Democracy Cape', type: 'cape' },
+    {type: 'primary', item: null},
+    {type: 'secondary', item: null},
+    {type: 'throwable', item: null},
+    {type: 'armor', item: null},
+    {type: 'helmet', item: null},
+    {type: 'cape', item: null},
 ];
 
 export const useLoadoutStore = create<LoadoutState>((set) => ({
     slots: initialSlots,
-    availableItems: initialItems,
     selectedSlot: null,
-    setSelectedSlot: (type) => set({ selectedSlot: type }),
+    setSelectedSlot: (type) => set({selectedSlot: type}),
     addItemToSlot: (item, slotType) => set((state) => ({
         slots: state.slots.map(slot =>
-            slot.type === slotType ? { ...slot, item } : slot
+            slot.type === slotType ? {...slot, item} : slot
         )
     })),
     removeItemFromSlot: (slotType) => set((state) => ({
         slots: state.slots.map(slot =>
-            slot.type === slotType ? { ...slot, item: null } : slot
+            slot.type === slotType ? {...slot, item: null} : slot
         )
     })),
+    weapons: [],
+    gear: [],
+
     fetchItems: async () => {
         try {
             const [gearResponse, weaponsResponse] = await Promise.all([
@@ -51,23 +45,23 @@ export const useLoadoutStore = create<LoadoutState>((set) => ({
                 fetch('http://localhost:3000/api/weapon')
             ]);
 
-            const gear = await gearResponse.json();
-            const weapons = await weaponsResponse.json();
+            const gearData = await gearResponse.json();
+            const weaponsData = await weaponsResponse.json();
 
-            const mappedItems: LoadoutItem[] = [
-                ...gear.map((item: any) => ({
-                    id: item.id.toString(),
+            set({
+                weapons: weaponsData.map((item: any) => ({
+                    id: `weapon-${item.id}`,
                     name: item.name,
-                    type: item.category as LoadoutItem['type']
+                    type: item.category as LoadoutItem['type'],
+                    category: 'weapon'
                 })),
-                ...weapons.map((item: any) => ({
-                    id: item.id.toString(),
+                gear: gearData.map((item: any) => ({
+                    id: `gear-${item.id}`,
                     name: item.name,
-                    type: item.category as LoadoutItem['type']
+                    type: item.category as LoadoutItem['type'],
+                    category: 'gear'
                 }))
-            ];
-
-            set({ availableItems: mappedItems });
+            });
         } catch (error) {
             console.error('Failed to fetch items:', error);
         }
