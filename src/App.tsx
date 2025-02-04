@@ -17,6 +17,19 @@ function App() {
     const throwableSlot = ['throwable'];
     const gearSlots = ['armor', 'helmet', 'cape'];
 
+    const sortedWeapons = {
+        primary: weapons.filter(w => w.category === 'primary'),
+        secondary: weapons.filter(w => w.category === 'secondary')
+    };
+
+    const sortedGear = {
+        armor: gear.filter(g => g.category === 'armor'),
+        helmet: gear.filter(g => g.category === 'helmet'),
+        cape: gear.filter(g => g.category === 'cape')
+    };
+
+    const sortedThrowables = throwable.sort((a, b) => a.name.localeCompare(b.name));
+
     // Determine which category is selected
     const showWeapons = selectedSlot ? weaponSlots.includes(selectedSlot) : true;
     const showThrowable = selectedSlot ? throwableSlot.includes(selectedSlot) : true;
@@ -50,41 +63,77 @@ function App() {
                         <div className="overflow-y-auto pr-2 sidebar">
                             <h2 className="text-xl mb-4">Available Items</h2>
 
+                            {/* Weapons Section */}
                             {showWeapons && (
                                 <div className="mb-6">
                                     <h3 className="text-lg font-bold text-yellow-500 mb-2">Weapons</h3>
-                                    <div className="space-y-2">
-                                        {weapons
-                                            .filter(item => !selectedSlot || item.category === selectedSlot)
-                                            .map((item) => (
-                                                <DraggableItem key={item.id} item={item}/>
+
+                                    <div className="mb-4">
+                                        <h4 className="text-md font-semibold text-gray-300 mb-1">Primary</h4>
+                                        <div className="space-y-2">
+                                            {sortedWeapons.primary.filter(item => !selectedSlot || item.category === selectedSlot).map((weapon) => (
+                                                <DraggableItem key={weapon.id} item={weapon}/>
                                             ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="mb-4">
+                                        <h4 className="text-md font-semibold text-gray-300 mb-1">Secondary</h4>
+                                        <div className="space-y-2">
+                                            {sortedWeapons.secondary.filter(item => !selectedSlot || item.category === selectedSlot).map((weapon) => (
+                                                <DraggableItem key={weapon.id} item={weapon}/>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            )}
+                            {showThrowable && (
+                                <div className="mb-6">
+                                    <div>
+                                        <h3 className="text-lg font-bold text-yellow-500 mb-2">Throwables</h3>
+                                        <div className="space-y-2">
+                                            {sortedThrowables.filter(item => !selectedSlot || item.category === selectedSlot).map((throwable) => (
+                                                <DraggableItem key={throwable.id} item={throwable}/>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             )}
 
-                            {showThrowable && (
-                                <div className="mb-6">
-                                    <h3 className="text-lg font-bold text-yellow-500 mb-2">Throwables</h3>
-                                    <div className="space-y-2">
-                                        {throwable
-                                            .filter(item => !selectedSlot || item.category === selectedSlot)
-                                            .map((item) => (
-                                                <DraggableItem key={item.id} item={item}/>
-                                            ))}
-                                    </div>
-                                </div>
-                            )}
 
                             {showGear && (
                                 <div className="mb-6">
                                     <h3 className="text-lg font-bold text-yellow-500 mb-2">Gear</h3>
-                                    <div className="space-y-2">
-                                        {gear
-                                            .filter(item => !selectedSlot || item.category === selectedSlot)
-                                            .map((item) => (
-                                                <DraggableItem key={item.id} item={item}/>
+
+                                    {/* Armor */}
+                                    <div className="mb-4">
+                                        <h4 className="text-md font-semibold text-gray-300 mb-1">Armor</h4>
+                                        <div className="space-y-2">
+                                            {sortedGear.armor.filter(item => !selectedSlot || item.category === selectedSlot).map((armor) => (
+                                                <DraggableItem key={armor.id} item={armor}/>
                                             ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Helmets */}
+                                    <div className="mb-4">
+                                        <h4 className="text-md font-semibold text-gray-300 mb-1">Helmets</h4>
+                                        <div className="space-y-2">
+                                            {sortedGear.helmet.filter(item => !selectedSlot || item.category === selectedSlot).map((helmet) => (
+                                                <DraggableItem key={helmet.id} item={helmet}/>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Capes */}
+                                    <div>
+                                        <h4 className="text-md font-semibold text-gray-300 mb-1">Capes</h4>
+                                        <div className="space-y-2">
+                                            {sortedGear.cape.filter(item => !selectedSlot || item.category === selectedSlot).map((cape) => (
+                                                <DraggableItem key={cape.id} item={cape}/>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                             )}
