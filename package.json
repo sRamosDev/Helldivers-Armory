@@ -1,11 +1,12 @@
 {
-  "name": "helldivers-hangar-front",
+  "name": "Helldiver's Armory",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "start:prod": "node dist/main",
     "lint": "eslint .",
     "preview": "vite preview"
   },
