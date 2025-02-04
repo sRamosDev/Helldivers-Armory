@@ -28,7 +28,7 @@ export const DropZone = ({slot}: { slot: LoadoutSlot }) => {
         <div
             ref={drop}
             onClick={handleSlotClick}
-            className={`p-4 border-2 rounded-lg transition-all
+            className={`p-4 border-2 object-contain rounded-lg transition-all
         ${canDrop ? "border-yellow-500 bg-yellow-900/20" : "border-gray-700"}
         ${slot.item ? "bg-gray-800" : "bg-gray-900"}
         ${!slot.item && selectedSlot === slot.category ? "ring-2 ring-blue-500" : ""}
