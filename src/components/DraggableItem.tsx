@@ -25,12 +25,12 @@ export const DraggableItem = ({item}: { item: LoadoutItem }) => {
                     {item.name}
                 </span>
             </div>
-            {/* Only show remove button in slots */}
-            {item.type !== "primary" && item.type !== "secondary" && item.type !== "throwable" && item.type !== "armor" && item.type !== "helmet" && item.type !== "cape" && (
+
+            {item.category !== "primary" && item.category !== "secondary" && item.category !== "throwable" && item.category !== "armor" && item.category !== "helmet" && item.category !== "cape" && (
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
-                        removeItemFromSlot(item.type);
+                        removeItemFromSlot(item.category);
                     }}
                     className="text-red-400 hover:text-red-300 ml-2"
                 >

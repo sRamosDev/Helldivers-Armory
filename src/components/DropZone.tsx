@@ -9,10 +9,10 @@ export const DropZone = ({slot}: { slot: LoadoutSlot }) => {
     const [{canDrop}, drop] = useDrop(() => ({
         accept: 'loadout-item',
         drop: (item: LoadoutItem) => {
-            addItemToSlot(item, slot.type);
+            addItemToSlot(item, slot.category);
             setSelectedSlot(null);
         },
-        canDrop: (item: LoadoutItem) => item.type === slot.type,
+        canDrop: (item: LoadoutItem) => item.category === slot.category,
         collect: (monitor) => ({
             canDrop: monitor.canDrop(),
         }),
@@ -20,7 +20,7 @@ export const DropZone = ({slot}: { slot: LoadoutSlot }) => {
 
     const handleSlotClick = () => {
         if (!slot.item) {
-            setSelectedSlot(slot.type === selectedSlot ? null : slot.type);
+            setSelectedSlot(slot.category === selectedSlot ? null : slot.category);
         }
     };
 
@@ -31,13 +31,13 @@ export const DropZone = ({slot}: { slot: LoadoutSlot }) => {
             className={`p-4 border-2 rounded-lg transition-all
         ${canDrop ? "border-yellow-500 bg-yellow-900/20" : "border-gray-700"}
         ${slot.item ? "bg-gray-800" : "bg-gray-900"}
-        ${!slot.item && selectedSlot === slot.type ? "ring-2 ring-blue-500" : ""}
+        ${!slot.item && selectedSlot === slot.category ? "ring-2 ring-blue-500" : ""}
         min-h-[100px] flex items-center justify-center`}
         >
             {slot.item ? (
                 <DraggableItem item={slot.item}/>
             ) : (
-                <span className="text-gray-500">{slot.type.toUpperCase()}</span>
+                <span className="text-gray-500">{slot.category.toUpperCase()}</span>
             )}
         </div>
     );
