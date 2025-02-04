@@ -68,7 +68,7 @@ export const useLoadoutStore = create<LoadoutState>((set,get) => ({
         };
 
         try {
-            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/loadouts`, {
+            const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/loadouts`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
