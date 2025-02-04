@@ -141,7 +141,7 @@ function App() {
 
                         <div className="flex flex-col overflow-hidden">
                             <h1 className="text-3xl mb-8">Helldivers 2 Loadout Builder</h1>
-                            <div className="grid grid-cols-2 gap-4 flex-1 overflow-y-auto pb-4 slot p-1">
+                            <div className="grid grid-cols-3 gap-4 flex-1 overflow-y-auto pb-4 slot p-1">
                                 {slots.map((slot) => (
                                     <DropZone key={slot.category} slot={slot}/>
                                 ))}
